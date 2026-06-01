@@ -1,18 +1,20 @@
-import type { Feature, Polygon, MultiPolygon } from 'geojson';
+import type { Polygon } from 'geojson';
 
-export type TerritoryGeometry = Polygon | MultiPolygon;
+export const APP_DATA_VERSION = 1;
 
 export interface Territory {
   id: number;
-  feature: Feature<TerritoryGeometry, { id: number; name: string }>;
-  centroid: [number, number];
+  name: string;
+  color: string;        // hex, e.g. "#d4a857"
+  notes: string;
+  geometry: Polygon;    // GeoJSON polygon as drawn
 }
 
 export interface Assignment {
   uid: string;
   time: string;
   corner: string;
-  groups: string;
+  group: string;
   leader: string;
   territoryIds: number[];
 }
@@ -20,19 +22,17 @@ export interface Assignment {
 export interface DaySchedule {
   key: string;
   label: string;
-  short: string;
+  dow?: number;         // 0..6 for "today" highlighting
   date?: string;
-  dow?: number; // JS getDay value if known (0..6)
   assignments: Assignment[];
 }
 
-export interface ScheduleData {
-  weekLabel: string | null;
-  days: DaySchedule[];
+export interface AppData {
+  version: number;
+  territories: Territory[];
+  schedule: { days: DaySchedule[] };
 }
 
-export interface GeocodedPoint {
-  corner: string;
-  lat: number;
-  lng: number;
+export function emptyAppData(): AppData {
+  return { version: APP_DATA_VERSION, territories: [], schedule: { days: [] } };
 }
