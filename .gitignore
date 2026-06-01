@@ -12,3 +12,5 @@ _probe*.csv
 _sheet_*.csv
 
 .vercel
+
+*.tsbuildinfo
