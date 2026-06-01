@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useMap } from 'react-leaflet';
 import L from 'leaflet';
 import '@geoman-io/leaflet-geoman-free';
@@ -21,6 +21,12 @@ function layerToPolygon(layer: L.Layer): GeoPolygon | null {
 function GeomanControls() {
   const map = useMap();
   const { data, dispatch } = useAppData();
+  const territoriesRef = useRef(data.territories);
+
+  // Keep the ref current on every render without re-running the draw-setup effect.
+  useEffect(() => {
+    territoriesRef.current = data.territories;
+  });
 
   useEffect(() => {
     map.pm.addControls({
@@ -35,7 +41,7 @@ function GeomanControls() {
       const poly = layerToPolygon(e.layer);
       map.removeLayer(e.layer); // store is the source of truth; MapView re-renders it
       if (!poly) return;
-      const id = nextId(data.territories);
+      const id = nextId(territoriesRef.current);
       dispatch({
         type: 'territory/add',
         territory: { id, name: `Territorio ${id}`, color: '#d4a857', notes: '', geometry: poly }
@@ -47,7 +53,7 @@ function GeomanControls() {
       map.off('pm:create', onCreate);
       map.pm.removeControls();
     };
-  }, [map, data.territories, dispatch]);
+  }, [map, dispatch]);
 
   return null;
 }

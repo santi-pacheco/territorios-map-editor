@@ -40,9 +40,7 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     return () => { if (saveTimer.current) clearTimeout(saveTimer.current); };
   }, [data, loading]);
 
-  const dispatch = (a: Action) => baseDispatch(a);
-
-  return <AppDataContext.Provider value={{ data, dispatch, loading, error }}>{children}</AppDataContext.Provider>;
+  return <AppDataContext.Provider value={{ data, dispatch: baseDispatch, loading, error }}>{children}</AppDataContext.Provider>;
 }
 
 export function useAppData(): Ctx {
