@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { emptyAppData } from '../types';
 
 // Use vi.hoisted so these variables are available inside the hoisted vi.mock factory.
-const { single, eq, update, selectEq, select, from } = vi.hoisted(() => {
+const { single, update, from } = vi.hoisted(() => {
   const single = vi.fn();
   const eq = vi.fn(() => ({ single }));
   const update = vi.fn(() => ({ eq: vi.fn().mockResolvedValue({ error: null }) }));
