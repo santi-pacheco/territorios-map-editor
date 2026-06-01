@@ -1,0 +1,14 @@
+node_modules
+dist
+.vercel
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+.vite
+_probe*.kml
+_probe*.csv
+_sheet_*.csv
+
+.vercel
