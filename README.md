@@ -16,9 +16,14 @@ comparten en vivo con todos.
    - Email: `manager@territorios.local`
    - Password: **este será el código** que usarán los administradores.
    - Dejá el usuario confirmado (Auto Confirm User = sí).
-5. Anotá dos datos de **Project Settings → API**:
-   - **Project URL**
-   - **anon public key**
+5. Anotá dos datos (Supabase cambió hace poco dónde están):
+   - **Project URL** → tocá el botón **Connect** (arriba en el dashboard); ahí
+     aparece `Project URL` (`https://xxxx.supabase.co`). También está en
+     **Settings → Data API**.
+   - **La clave pública** → **Settings → API Keys** → copiá la **Publishable key**
+     (empieza con `sb_publishable_...`). Esa es la que va en `VITE_SUPABASE_ANON_KEY`.
+     - La vieja clave **anon** está en la pestaña **Legacy API Keys** y todavía
+       funciona, pero conviene usar la *Publishable key*.
 
 ### 2. Subir el código a GitHub
 1. Creá un repositorio nuevo en https://github.com (vacío).
@@ -39,7 +44,7 @@ comparten en vivo con todos.
    | Name | Value |
    |------|-------|
    | `VITE_SUPABASE_URL` | tu Project URL |
-   | `VITE_SUPABASE_ANON_KEY` | tu anon public key |
+   | `VITE_SUPABASE_ANON_KEY` | tu Publishable key (`sb_publishable_...`) |
    | `VITE_MANAGER_EMAIL` | `manager@territorios.local` |
 4. Hacé clic en **Deploy**. En ~1 minuto tenés tu URL pública.
 
