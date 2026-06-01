@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { MapView } from './components/MapView';
+import { useState } from 'react';
+import { MapaView } from './components/MapaView';
 import { MapEditor } from './components/MapEditor';
 import { TerritoriesTable } from './components/TerritoriesTable';
 import { ScheduleEditor } from './components/ScheduleEditor';
@@ -8,25 +8,15 @@ import { HelpModal } from './components/HelpModal';
 import { Toolbar } from './components/Toolbar';
 import { useAppData } from './store/AppDataContext';
 import { useManager } from './store/useManager';
-import { todayDow } from './lib/days';
 
 type Tab = 'mapa' | 'territorios' | 'agenda';
 
 export default function App() {
-  const { data, loading, error } = useAppData();
+  const { loading, error } = useAppData();
   const { isManager, login, logout } = useManager();
   const [tab, setTab] = useState<Tab>('mapa');
   const [showLogin, setShowLogin] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
-
-  // Highlight territories assigned today (viewer Mapa view).
-  const highlightedIds = useMemo(() => {
-    const dow = todayDow();
-    const day = data.schedule.days.find((d) => d.dow === dow);
-    const s = new Set<number>();
-    day?.assignments.forEach((a) => a.territoryIds.forEach((id) => s.add(id)));
-    return s;
-  }, [data]);
 
   const tabs: { key: Tab; label: string; managerOnly: boolean }[] = [
     { key: 'mapa', label: 'Mapa', managerOnly: false },
@@ -66,10 +56,10 @@ export default function App() {
         ) : error ? (
           <div className="grid h-full place-items-center text-red-600 p-4 text-center">Error: {error}</div>
         ) : tab === 'mapa' ? (
-          <MapView territories={data.territories} highlightedIds={highlightedIds} />
+          <MapaView />
         ) : tab === 'territorios' ? (
           <div className="grid h-full lg:grid-cols-[1fr_380px] min-h-0">
-            <div className="min-h-0"><MapEditor highlightedIds={highlightedIds} /></div>
+            <div className="min-h-0"><MapEditor /></div>
             <aside className="min-h-0 border-l border-jw-navy/10 bg-white"><TerritoriesTable /></aside>
           </div>
         ) : (

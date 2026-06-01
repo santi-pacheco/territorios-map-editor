@@ -1,4 +1,5 @@
 import { useAppData } from '../store/AppDataContext';
+import { DAY_DEFS } from '../lib/days';
 import type { Assignment } from '../types';
 
 function TerritoryPicker({
@@ -45,12 +46,17 @@ export function ScheduleEditor() {
               value={day.label}
               onChange={(e) => dispatch({ type: 'day/update', key: day.key, patch: { label: e.target.value } })}
             />
-            <input
-              type="number" min={0} max={6} placeholder="DOW"
-              className="w-16 rounded border border-jw-navy/15 px-2 py-1 text-sm"
+            <select
+              title="Día de la semana (para resaltar el día de hoy en el mapa)"
+              className="rounded border border-jw-navy/15 px-2 py-1 text-sm bg-white"
               value={day.dow ?? ''}
               onChange={(e) => dispatch({ type: 'day/update', key: day.key, patch: { dow: e.target.value === '' ? undefined : Number(e.target.value) } })}
-            />
+            >
+              <option value="">Día de la semana…</option>
+              {DAY_DEFS.map((d) => (
+                <option key={d.dow} value={d.dow}>{d.label}</option>
+              ))}
+            </select>
             <button onClick={() => dispatch({ type: 'day/remove', key: day.key })} className="ml-auto text-red-600">Eliminar día</button>
           </div>
           {day.assignments.map((a: Assignment) => (

@@ -33,14 +33,30 @@ function FitBounds({ territories }: { territories: Territory[] }) {
   return null;
 }
 
+// Flies the map to the given territories whenever focusIds changes (e.g. a salida is selected).
+function FocusController({ territories, focusIds }: { territories: Territory[]; focusIds?: number[] }) {
+  const map = useMap();
+  useEffect(() => {
+    if (!focusIds || focusIds.length === 0) return;
+    const sel = territories.filter((t) => focusIds.includes(t.id));
+    if (sel.length === 0) return;
+    const bounds = L.latLngBounds([]);
+    for (const t of sel) for (const [lng, lat] of t.geometry.coordinates[0]) bounds.extend([lat, lng]);
+    if (bounds.isValid()) map.flyToBounds(bounds, { padding: [60, 60], maxZoom: 16, duration: 0.5 });
+  }, [focusIds, territories, map]);
+  return null;
+}
+
 export function MapView({
   territories,
   highlightedIds,
+  focusIds,
   onPolygonClick,
   children
 }: {
   territories: Territory[];
   highlightedIds?: Set<number>;
+  focusIds?: number[];
   onPolygonClick?: (t: Territory) => void;
   children?: React.ReactNode;
 }) {
@@ -59,6 +75,7 @@ export function MapView({
         <TileLayer url="https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png" subdomains="abcd" maxZoom={19} />
       </Pane>
       <FitBounds territories={territories} />
+      <FocusController territories={territories} focusIds={focusIds} />
       {polys.map(({ t, positions }) => (
         <Polygon
           key={t.id}
